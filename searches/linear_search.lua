@@ -14,6 +14,7 @@ return function(
 			return -index
 		end
 	end
-	-- Negative insertion index after the last element if the list is unsorted or the value is bigger than all values in the sorted list
+	-- Negative insertion index after the last element
+	-- Returned if the list is unsorted or the value is bigger than all values in the sorted list
 	return -#list - 1
 end
