@@ -1,0 +1,55 @@
+name: code_checks
+
+on: [push, pull_request]
+
+jobs:
+
+  check_format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: JohnnyMorganz/stylua-action@1.0.0
+      with:
+        # TODO the action needs this to download from GitHub releases. Don't upgrade the action for now!
+        token: ${{ secrets.GITHUB_TOKEN }}
+        args: --check .
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: leafo/gh-actions-lua@v8.0.0
+      with:
+        luaVersion: "5.1"
+
+    - uses: leafo/gh-actions-luarocks@v4
+
+    - name: setup 
+      run: |
+        luarocks install luacheck
+    - name: lint
+      run: luacheck .
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: leafo/gh-actions-lua@v8.0.0
+      with:
+        luaVersion: "5.1"
+
+    - uses: leafo/gh-actions-luarocks@v4
+
+    - name: setup 
+      run: |
+        luarocks install busted
+
+    - name: test
+      run: |
+        busted -o utfTerminal .spec
