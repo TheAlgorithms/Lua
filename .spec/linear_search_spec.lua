@@ -1,0 +1,11 @@
+describe("Linear search", function()
+	local linear_search = require"searches/linear_search"
+	it("should return one index if found", function()
+		assert.equals(linear_search({1, 2, 3}, 2, true), 2)
+		assert.equals(linear_search({1, 3, 2}, 2), 3)
+	end)
+	it("should return a valid negative insertion index if not found", function()
+		assert.equals(linear_search({2, 4, 6}, 1, true), -1)
+		assert.equals(linear_search({2, 4, 6}, 1), -4)
+	end)
+end)
