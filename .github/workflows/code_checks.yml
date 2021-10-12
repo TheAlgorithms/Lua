@@ -25,7 +25,7 @@ jobs:
     - name: setup 
       run: |
         sudo apt install luarocks -qyy
-        luarocks install luacheck
+        sudo luarocks install luacheck
     - name: lint
       run: luacheck .
 
