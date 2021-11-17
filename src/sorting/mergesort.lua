@@ -8,27 +8,27 @@ return function(
 		return a < b
 	end
 	-- Merges two sorted lists; elements of a come before those of b
-	local function merge(result, list, other_list)
+	local function merge(result, list_1, list_2)
 		local result_index = 1
-		local index = 1
-		local other_index = 1
-		while index <= #list and other_index <= #other_list do
+		local index_1 = 1
+		local index_2 = 1
+		while index_1 <= #list_1 and index_2 <= #list_2 do
 			-- Compare "head" element, insert "winner"
-			if less_than(other_list[other_index], list[index]) then
-				result[result_index] = other_list[other_index]
-				other_index = other_index + 1
+			if less_than(list_2[index_2], list_1[index_1]) then
+				result[result_index] = list_2[index_2]
+				index_2 = index_2 + 1
 			else
-				result[result_index] = list[index]
-				index = index + 1
+				result[result_index] = list_1[index_1]
+				index_1 = index_1 + 1
 			end
 			result_index = result_index + 1
 		end
 		-- Add remaining elements of either list or other_list
-		for offset = 0, #list - index do
-			result[result_index + offset] = list[index + offset]
+		for offset = 0, #list_1 - index_1 do
+			result[result_index + offset] = list_1[index_1 + offset]
 		end
-		for offset = 0, #other_list - other_index do
-			result[result_index + offset] = other_list[other_index + offset]
+		for offset = 0, #list_2 - index_2 do
+			result[result_index + offset] = list_2[index_2 + offset]
 		end
 	end
 
