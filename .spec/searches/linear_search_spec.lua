@@ -1,5 +1,5 @@
 describe("Linear search", function()
-	local linear_search = require"searches/linear_search"
+	local linear_search = require"searches.linear_search"
 	it("should return one index if found", function()
 		assert.equals(linear_search({1, 2, 3}, 2, true), 2)
 		assert.equals(linear_search({1, 3, 2}, 2), 3)

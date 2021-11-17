@@ -1,5 +1,5 @@
 describe("Binary search", function()
-	local binary_search = require("searches/binary_search")
+	local binary_search = require("searches.binary_search")
 	it("should return one index if found", function()
 		assert.equals(binary_search({ 1, 2, 3 }, 2), 2)
 	end)
