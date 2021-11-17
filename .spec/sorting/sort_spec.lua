@@ -1,5 +1,13 @@
 local is_sorted = require("sorting.is_sorted")
 local function check_sort(sort)
+	it("should handle edge cases", function()
+		local list = {}
+		sort(list)
+		assert(next(list) == nil)
+		list = { 1 }
+		sort(list)
+		assert(list[1] == 1)
+	end)
 	it("should sort random lists", function()
 		for _ = 1, 100 do
 			local list = {}
