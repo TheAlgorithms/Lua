@@ -57,4 +57,4 @@ function heap:pop()
 	return value
 end
 
-return heap
+return require("class")(heap)
