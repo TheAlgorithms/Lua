@@ -7,8 +7,8 @@ describe("Linked stack", function()
 			stack:push(i)
 		end
 		for i = 10, 1, -1 do
-			assert.equals(stack:top(), i)
-			assert.equals(stack:pop(), i)
+			assert.equals(i, stack:top())
+			assert.equals(i, stack:pop())
 		end
 		assert.truthy(stack:empty())
 	end)
