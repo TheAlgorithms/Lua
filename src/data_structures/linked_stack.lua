@@ -1,8 +1,7 @@
 local linked_stack = {}
-local metatable = { __index = linked_stack }
 
 function linked_stack.new()
-	return setmetatable({}, metatable)
+	return {}
 end
 
 function linked_stack:empty()
@@ -29,4 +28,4 @@ function linked_stack:pop()
 	return top_element
 end
 
-return linked_stack
+return require("class")(linked_stack)

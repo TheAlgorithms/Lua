@@ -1,8 +1,7 @@
 local linked_queue = {}
-local metatable = { __index = linked_queue }
 
 function linked_queue.new()
-	return setmetatable({}, metatable)
+	return {}
 end
 
 function linked_queue:empty()
@@ -38,4 +37,4 @@ function linked_queue:pop()
 	return top_element
 end
 
-return linked_queue
+return require("class")(linked_queue)
