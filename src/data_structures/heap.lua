@@ -1,14 +1,12 @@
 local heap = {}
 
-local metatable = { __index = heap }
-
 function heap.less_than(a, b)
 	return a < b
 end
 
 function heap.new(less_than)
 	-- empty min heap
-	return setmetatable({ less_than = less_than }, metatable)
+	return { less_than = less_than }
 end
 
 function heap:push(value)
