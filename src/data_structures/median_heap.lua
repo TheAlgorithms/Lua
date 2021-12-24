@@ -30,7 +30,6 @@ function median_heap:size()
 end
 
 function median_heap:top()
-	assert(self.lower_half:top(), #self.lower_half .. " - " .. #self.upper_half .. " " .. (self:empty() and "empty" or "something"))
 	-- the median
 	return self.lower_half:top()
 end
