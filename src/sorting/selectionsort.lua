@@ -1,4 +1,4 @@
---! selection sort has quadratic time complexity and should not be used in practice
+--! Selectionsort has quadratic time complexity and should not be used in practice
 return function(
 	-- list to be sorted in-place
 	list,

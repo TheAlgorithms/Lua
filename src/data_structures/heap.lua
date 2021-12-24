@@ -9,6 +9,14 @@ function heap.new(less_than)
 	return { less_than = less_than }
 end
 
+function heap:empty()
+	return self[1] == nil
+end
+
+function heap:size()
+	return #self
+end
+
 function heap:push(value)
 	table.insert(self, value)
 	local function heapify(index)
