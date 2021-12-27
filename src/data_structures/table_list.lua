@@ -98,6 +98,7 @@ function list:pop_head()
 	end
 	local value = self:get_head()
 	self._head_index = self._head_index + 1
+	self._length = self._length - 1
 	self[self._head_index] = nil
 	return value
 end
