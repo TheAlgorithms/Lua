@@ -90,4 +90,19 @@ function table_heap:replace(element, new_element)
 	(self.less_than(new_element, element) and heapify_up or heapify_down)(self, index)
 end
 
+function table_heap:remove(element)
+	local index = assert(self:find_index(element), "element not found")
+	self.indices[element] = nil
+	if index == #self then
+		self[index] = nil
+	else
+		local last_index = #self
+		local last_element = self[last_index]
+		self[last_index] = nil
+		self[index] = last_element
+		self.indices[last_element] = index;
+		(self.less_than(last_element, element) and heapify_up or heapify_down)(self, index)
+	end
+end
+
 return require("class")(table_heap)

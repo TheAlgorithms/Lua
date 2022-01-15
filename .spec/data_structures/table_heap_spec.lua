@@ -23,6 +23,11 @@ describe("Table heap", function()
 	heap:replace(42, 0)
 	assert.equals(0, heap:pop())
 	heap:replace(69, 101)
+	assert.falsy(heap:find_index(69))
+	assert.truthy(heap:find_index(101))
+	heap:remove(101)
+	assert.falsy(heap:find_index(101))
+	heap:push(101)
 	local last = 0
 	for _ = 1, 98 do
 		local new = heap:pop()
