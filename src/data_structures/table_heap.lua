@@ -84,7 +84,9 @@ end
 function table_heap:replace(element, new_element)
 	local index = assert(self:find_index(element))
 	assert(self:find_index(new_element) == nil, "no duplicates allowed")
-	self[index] = new_element;
+	self[index] = new_element
+	self.indices[element] = nil
+	self.indices[new_element] = index;
 	(self.less_than(new_element, element) and heapify_up or heapify_down)(self, index)
 end
 
