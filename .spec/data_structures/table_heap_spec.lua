@@ -2,9 +2,8 @@ describe("Table heap", function()
 	local table_heap = require("data_structures.table_heap")
 	local shuffle = require("random.fisher_yates_shuffle")
 
-	local n = 100
 	local list = {}
-	for index = 1, n do
+	for index = 1, 100 do
 		list[index] = index
 	end
 	shuffle(list)
@@ -17,7 +16,7 @@ describe("Table heap", function()
 		assert.equals(index, popped)
 	end
 	heap = table_heap.new()
-	for i = 1, n do
+	for i = 1, 100 do
 		heap:push(i)
 	end
 	heap:replace(42, 0)
