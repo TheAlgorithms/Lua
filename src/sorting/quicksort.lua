@@ -32,8 +32,17 @@ return function(
 			-- Place pivot between numbers <= pivot (from lower_index to pivot_index - 1)
 			-- and numbers >= pivot (from pivot_index to upper_index)
 			list[pivot_index], list[upper_index] = list[upper_index], list[pivot_index]
-			quicksort(lower_index, pivot_index - 1)
+			-- Sort larger interval first to ensure a worst-case logarithmic stack size (which equals space complexity)
+			local lower_interval_size, upper_interval_size =
+				pivot_index - 1 - lower_index, upper_index - pivot_index - 1
+			if lower_interval_size > upper_interval_size then
+				-- lower interval is larger, sort it first
+				quicksort(lower_index, pivot_index - 1)
+				return quicksort(pivot_index + 1, upper_index)
+			end
+			-- upper interval is larger, sort it first
 			quicksort(pivot_index + 1, upper_index)
+			return quicksort(lower_index, pivot_index - 1)
 		end
 		quicksort(1, #list)
 	end
