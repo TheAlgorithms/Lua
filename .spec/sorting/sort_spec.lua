@@ -19,7 +19,6 @@ local function check_sort(sort)
 		end
 	end)
 end
--- Note: Heap is tested through testing heapsort as well
 describe("Heapsort", function()
 	check_sort(require("sorting.heapsort"))
 end)
