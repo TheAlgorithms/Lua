@@ -80,13 +80,15 @@ function bst:remove(key)
 		-- equals
 		if tree[true] then
 			if tree[false] then -- two children
-				-- pick the leftmost descendant to replace
-				local parent, key = tree, false
-				while parent[key][true] do
-					parent, key = parent[key], true
+				-- pick the leftmost (lm) descendant to replace
+				local lm_parent, lm_key = tree, false -- parent of & key to leftmost descendant
+				while lm_parent[lm_key][true] do
+					lm_parent, lm_key = lm_parent[lm_key], true
 				end
-				tree.key = parent[key].key -- update key
-				parent[key] = parent[key][false] -- replace leftmost descendant with it's only child (if any)
+				local lm_descendant = lm_parent[lm_key]
+				tree.key = lm_descendant.key -- update key
+				-- replace leftmost descendant with it's only child (if any)
+				lm_parent[lm_key] = lm_descendant[false]
 			else -- only child
 				parent[side] = tree[true] -- replace with child
 			end
