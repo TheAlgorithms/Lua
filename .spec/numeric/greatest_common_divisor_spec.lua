@@ -35,4 +35,13 @@ describe("GCD", function()
 			assert.equals(naive_gcd(a, b), gcd(a, b))
 		end
 	end)
+	it("should return Bezout's identity", function()
+		local function test_bezout_identity(a, b)
+			local div, x, y = gcd(a, b)
+			assert.equals(div, a * x + b * y)
+		end
+		for _ = 1, 1e3 do
+			test_bezout_identity(math.random(1e3), math.random(1e3))
+		end
+	end)
 end)
