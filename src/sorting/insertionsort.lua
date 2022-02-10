@@ -12,10 +12,10 @@ return function(
 		local value = list[index]
 		-- Even if a binary search was used to determine the insertion index,
 		-- time complexity would remain quadratic due to the series of swaps required for insertion
-		local insertion_index = 0
-		repeat
+		local insertion_index = 1
+		while less_than(list[insertion_index], value) and insertion_index < #list do
 			insertion_index = insertion_index + 1
-		until less_than(value, list[insertion_index]) or insertion_index >= #list
+		end
 		-- Shift all elements - starting at the insertion index - up by one
 		for shift_index = index - 1, insertion_index, -1 do
 			list[shift_index + 1] = list[shift_index]
