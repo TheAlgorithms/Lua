@@ -1,4 +1,4 @@
-local function check_sort(sort)
+local function check_sort(sort, not_comparison_based)
 	it("should handle edge cases", function()
 		local list = {}
 		sort(list)
@@ -23,6 +23,9 @@ local function check_sort(sort)
 	it("should sort random lists", function()
 		test_lists()
 	end)
+	if not_comparison_based then
+		return
+	end
 	it("should support custom less_than functions", function()
 		test_lists(function(a, b)
 			return -a < -b
@@ -51,5 +54,5 @@ describe("Insertionsort", function()
 	check_sort(require("sorting.insertionsort"))
 end)
 describe("Radix Sort", function()
-	check_sort(require("sorting.radixsort")())
+	check_sort(require("sorting.radixsort")(), true)
 end)
