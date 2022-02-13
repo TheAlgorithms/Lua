@@ -7,7 +7,7 @@ local function check_sort(sort)
 		sort(list)
 		assert(list[1] == 1)
 	end)
-	it("should sort random lists", function()
+	local function test_lists(less_than)
 		for _ = 1, 100 do
 			local list, copy = {}, {}
 			for index = 1, 100 do
@@ -15,10 +15,24 @@ local function check_sort(sort)
 				copy[index] = list[index]
 			end
 			-- Compare against table.sort
-			table.sort(copy)
-			sort(list)
+			table.sort(copy, less_than)
+			sort(list, less_than)
 			assert.same(copy, list)
 		end
+	end
+	it("should sort random lists", function()
+		test_lists()
+	end)
+	it("should support custom less_than functions", function()
+		test_lists(function(a, b)
+			return -a < -b
+		end)
+		test_lists(function(a, b)
+			return a > b
+		end)
+		test_lists(function(a, b)
+			return 1 / a > 1 / b
+		end)
 	end)
 end
 describe("Heapsort", function()
