@@ -11,7 +11,7 @@ local function check_sort(sort)
 		for _ = 1, 100 do
 			local list, copy = {}, {}
 			for index = 1, 100 do
-				list[index] = math.random(1, 1000)
+				list[index] = math.random(1e3)
 				copy[index] = list[index]
 			end
 			-- Compare against table.sort

@@ -30,7 +30,7 @@ describe("Binary search tree", function()
 	-- Insert random numbers
 	local hash_set = {}
 	for _ = 1, 100 do
-		local x = math.random(1, 1e6)
+		local x = math.random(1e6)
 		if not tree:has(x) then
 			assert.falsy(hash_set[x])
 			tree:add(x)
@@ -71,7 +71,7 @@ describe("Binary search tree", function()
 		assert(i, k)
 	end
 	for _ = 1, 100 do
-		local i = math.random(1, #sorted_list)
+		local i = math.random(#sorted_list)
 		local j = math.random(i, #sorted_list)
 		test_range(i, j)
 	end
