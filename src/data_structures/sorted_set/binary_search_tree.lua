@@ -55,7 +55,7 @@ function bst:add(key)
 		if tree[is_smaller] then
 			tree = tree[is_smaller]
 		else
-			self.set_child(tree, is_smaller, { key = key })
+			tree[is_smaller] = { key = key }
 			break
 		end
 	end
