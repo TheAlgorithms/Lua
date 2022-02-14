@@ -4,7 +4,7 @@ describe("Median heap", function()
 	for i = 1, 100 do
 		heap:push(i)
 	end
-	assert.equals(50, heap:top())
-	assert.equals(50, heap:pop())
-	assert.equals(51, heap:pop())
+	assert.equal(50, heap:top())
+	assert.equal(50, heap:pop())
+	assert.equal(51, heap:pop())
 end)

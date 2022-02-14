@@ -7,8 +7,8 @@ describe("Linked queue", function()
 			queue:push(i)
 		end
 		for i = 1, 10 do
-			assert.equals(i, queue:top())
-			assert.equals(i, queue:pop())
+			assert.equal(i, queue:top())
+			assert.equal(i, queue:pop())
 		end
 		assert.truthy(queue:empty())
 	end)

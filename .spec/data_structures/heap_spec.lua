@@ -11,13 +11,13 @@ describe("Heap", function()
 	local nums = heap.new()
 	for index = 1, #list do
 		nums:push(list[index])
-		assert.equals(index, nums:size())
+		assert.equal(index, nums:size())
 	end
 	for index = 1, #list do
-		assert.equals(#list - index + 1, nums:size())
-		assert.equals(index, nums:top())
+		assert.equal(#list - index + 1, nums:size())
+		assert.equal(index, nums:top())
 		local popped = nums:pop()
-		assert.equals(index, popped)
+		assert.equal(index, popped)
 	end
 	assert(nums:empty())
 end)

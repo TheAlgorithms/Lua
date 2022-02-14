@@ -13,14 +13,14 @@ describe("Table heap", function()
 	end
 	for index = 1, #list do
 		local popped = heap:pop()
-		assert.equals(index, popped)
+		assert.equal(index, popped)
 	end
 	heap = table_heap.new()
 	for i = 1, 100 do
 		heap:push(i)
 	end
 	heap:replace(42, 0)
-	assert.equals(0, heap:pop())
+	assert.equal(0, heap:pop())
 	heap:replace(69, 101)
 	assert.falsy(heap:find_index(69))
 	assert.truthy(heap:find_index(101))
@@ -33,5 +33,5 @@ describe("Table heap", function()
 		assert.truthy(new > last)
 		last = new
 	end
-	assert.equals(101, heap:pop())
+	assert.equal(101, heap:pop())
 end)

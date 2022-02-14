@@ -6,8 +6,8 @@ local function test_stack(stack_class)
 			stack:push(i)
 		end
 		for i = 10, 1, -1 do
-			assert.equals(i, stack:top())
-			assert.equals(i, stack:pop())
+			assert.equal(i, stack:top())
+			assert.equal(i, stack:pop())
 		end
 		assert.truthy(stack:empty())
 	end)
