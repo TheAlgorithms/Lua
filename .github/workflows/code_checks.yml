@@ -27,7 +27,9 @@ jobs:
         sudo apt install luarocks -qyy
         sudo luarocks install luacheck
     - name: lint
-      run: luacheck src
+      run: |
+        luacheck src
+        luacheck .spec --config .spec/.luacheckrc
 
   test:
     runs-on: ubuntu-latest
