@@ -4,7 +4,12 @@ describe("Binary search", function()
 		assert.equals(2, binary_search({ 1, 2, 3 }, 2))
 	end)
 	it("should support a custom less_than function", function()
-		assert.equals(1, binary_search({ 3, 2, 1 }, 3, function(a, b) return a > b end))
+		assert.equals(
+			1,
+			binary_search({ 3, 2, 1 }, 3, function(a, b)
+				return a > b
+			end)
+		)
 	end)
 	it("should return the negative insertion index if not found", function()
 		assert.equals(-1, binary_search({ 2, 3, 4 }, 1))

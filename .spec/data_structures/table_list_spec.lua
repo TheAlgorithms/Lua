@@ -1,6 +1,6 @@
 describe("Table list", function()
 	local table_list = require("data_structures.table_list")
-	local list = table_list.new{1, 2, 3}
+	local list = table_list.new({ 1, 2, 3 })
 	assert.equals(3, list:len())
 	for i = 1, 3 do
 		assert.truthy(list:in_bounds(i))
