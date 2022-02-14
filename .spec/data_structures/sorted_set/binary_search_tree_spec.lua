@@ -14,17 +14,17 @@ describe("Binary search tree", function()
 			assert.truthy(subtree[false].key > subtree.key)
 		end
 	end
-	local function count(tree)
-		if not tree then
+	local function count(subtree)
+		if not subtree then
 			return 0
 		end
-		if tree.root then
-			return count(tree.root)
+		if subtree.root then
+			return count(subtree.root)
 		end
-		if not tree.key then
+		if not subtree.key then
 			return 0
 		end
-		return 1 + count(tree[true]) + count(tree[false])
+		return 1 + count(subtree[true]) + count(subtree[false])
 	end
 	check_bst(tree.root)
 	-- Insert random numbers
@@ -47,28 +47,30 @@ describe("Binary search tree", function()
 	table.sort(sorted_list)
 	assert.equal(#sorted_list, count(tree))
 	-- Iterate tree in descending order
-	local i = #sorted_list
-	tree:descending(function(key)
-		assert.equal(sorted_list[i], key)
-		i = i - 1
-	end)
-	assert.equal(0, i)
-	local function test_range(i, j)
+	do
+		local i = #sorted_list
+		tree:descending(function(key)
+			assert.equal(sorted_list[i], key)
+			i = i - 1
+		end)
+		assert.equal(0, i)
+	end
+	local function test_range(from, to)
 		-- Ascending
-		local k = i
+		local k = from
 		tree:range(function(key)
-			assert.truthy(k <= j)
+			assert.truthy(k <= to)
 			assert.equal(sorted_list[k], key)
 			k = k + 1
-		end, sorted_list[i], sorted_list[j])
-		assert.equal(j + 1, k)
+		end, sorted_list[from], sorted_list[to])
+		assert.equal(to + 1, k)
 		-- Descending
 		tree:range(function(key)
 			k = k - 1
-			assert.truthy(k >= i)
+			assert.truthy(k >= from)
 			assert.equal(sorted_list[k], key)
-		end, sorted_list[j], sorted_list[i])
-		assert(i, k)
+		end, sorted_list[to], sorted_list[from])
+		assert(from, k)
 	end
 	for _ = 1, 100 do
 		local i = math.random(#sorted_list)
