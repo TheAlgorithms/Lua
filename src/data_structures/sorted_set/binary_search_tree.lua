@@ -13,21 +13,6 @@ function bst:empty()
 	return not self.root
 end
 
-function bst:has(key)
-	local less_than = self.less_than
-	local tree = self.root
-	while tree do
-		if less_than(key, tree.key) then
-			tree = tree[true]
-		elseif less_than(tree.key, key) then
-			tree = tree[false]
-		else -- neither smaller nor larger than the key => must be equal
-			return true
-		end
-	end
-	return false
-end
-
 function bst:get(key)
 	local less_than = self.less_than
 	local tree = self.root
@@ -40,6 +25,11 @@ function bst:get(key)
 			return tree.key
 		end
 	end
+end
+
+function bst:has(key)
+	-- Check if nothing was returned. This also works for `nil` keys.
+	return select("#", self:get(key)) > 0
 end
 
 -- adding keys multiple times is possible (multisets), but not guaranteed to work; it also has worst-case linear time

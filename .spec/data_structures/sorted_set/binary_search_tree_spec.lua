@@ -84,6 +84,7 @@ describe("Binary search tree", function()
 	local c = #sorted_list
 	for x in pairs(hash_set) do
 		assert.truthy(tree:has(x))
+		assert.equal(x, tree:get(x))
 		assert.truthy(tree:remove(x))
 		c = c - 1
 		assert.equal(c, count(tree))
