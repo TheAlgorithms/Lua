@@ -1,4 +1,5 @@
-local function check_sort(sort, not_comparison_based)
+local function check_sort(sort, len, not_comparison_based)
+	len = len or 100
 	it("should handle edge cases", function()
 		local list = {}
 		sort(list)
@@ -8,9 +9,9 @@ local function check_sort(sort, not_comparison_based)
 		assert(list[1] == 1)
 	end)
 	local function test_lists(less_than)
-		for _ = 1, 100 do
+		for _ = 1, len do
 			local list, copy = {}, {}
-			for index = 1, 100 do
+			for index = 1, len do
 				list[index] = math.random(1e3)
 				copy[index] = list[index]
 			end
@@ -45,7 +46,15 @@ describe("Mergesort", function()
 	check_sort(require("sorting.mergesort"))
 end)
 describe("Quicksort", function()
-	check_sort(require("sorting.quicksort")())
+	local quicksort = require("sorting.quicksort")
+	check_sort(quicksort()) -- default pivot picking strategy
+	-- Pick last/first element as pivot; both strategy are efficient for the random lists used
+	check_sort(quicksort(function(from)
+		return from
+	end))
+	check_sort(quicksort(function(_, to)
+		return to
+	end))
 end)
 describe("Selectionsort", function()
 	check_sort(require("sorting.selectionsort"))
@@ -56,9 +65,13 @@ end)
 describe("Bubblesort", function()
 	check_sort(require("sorting.bubblesort"))
 end)
-describe("Radix Sort", function()
+describe("Radixsort", function()
+	-- Test with multiple radii
 	local radixsort = require("sorting.radixsort")
-	check_sort(radixsort(), true)
-	check_sort(radixsort(2), true)
-	check_sort(radixsort(1e3), true)
+	check_sort(radixsort(), nil, true)
+	check_sort(radixsort(2), nil, true)
+	check_sort(radixsort(1e3), nil, true)
+end)
+describe("Bogosort", function()
+	check_sort(require("sorting.bogosort"), 5)
 end)
