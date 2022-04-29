@@ -1,5 +1,5 @@
 describe("GCD", function()
-	local gcd = require("numeric.greatest_common_divisor")
+	local gcd = require("math.greatest_common_divisor")
 	it("should handle edge cases properly", function()
 		-- Zero
 		assert.equal(1, gcd(0, 0))

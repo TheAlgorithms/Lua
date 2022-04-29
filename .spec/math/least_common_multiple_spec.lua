@@ -1,5 +1,5 @@
 describe("LCM", function()
-	local lcm = require("numeric.least_common_multiple")
+	local lcm = require("math.least_common_multiple")
 	it("should handle edge cases properly", function()
 		-- Zero
 		assert.equal(0, lcm(0, 0))

@@ -1,5 +1,5 @@
 describe("Simplist radical form", function()
-	local srf = require("numeric.simplist_radical_form")
+	local srf = require("math.simplist_radical_form")
 	local function test_srf(x, expected_coeff, expected_root_term)
 		assert.same({expected_coeff, expected_root_term}, {srf(x)})
 	end

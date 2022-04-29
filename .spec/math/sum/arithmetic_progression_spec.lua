@@ -1,5 +1,5 @@
 describe("Arithmetic progression", function()
-	local arithmetic_progression = require("numeric.sum.arithmetic_progression")
+	local arithmetic_progression = require("math.sum.arithmetic_progression")
 	-- Compare against a simple for loop
 	local function arithmetic_progression_loop(from, to, step)
 		local sum = 0

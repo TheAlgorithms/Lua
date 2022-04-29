@@ -1,4 +1,4 @@
-local gcd = require("numeric.greatest_common_divisor")
+local gcd = require("math.greatest_common_divisor")
 return function(
 	a, -- number
 	b -- number

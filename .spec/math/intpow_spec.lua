@@ -1,5 +1,5 @@
 describe("Integer exponentiation", function()
-	local intpow = require("numeric.intpow")
+	local intpow = require("math.intpow")
 	it("should work for small numbers & exponents", function()
 		for n = -1000, 1000 do
 			for exp = -2, 5 do
