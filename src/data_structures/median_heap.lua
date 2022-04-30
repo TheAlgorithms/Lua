@@ -1,6 +1,6 @@
 local heap = require("data_structures.heap")
 
--- A heap which provides the median, defined as the floor(n/2)-th smallest element, as it's top element
+-- A heap which provides the median, defined as the floor(n/2)-th smallest element, as its top element
 local median_heap = {}
 
 function median_heap.less_than(a, b)
