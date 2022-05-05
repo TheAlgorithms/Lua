@@ -54,8 +54,11 @@ describe("Fraction", function()
 		end)
 	end)
 	describe("comparison", function()
-		local function srand(to) -- signed random
-			return math.random(0, 2 * to) - to
+		local function srand(to) -- signed, nonzero random
+			if math.random() < 0.5 then
+				return -math.random(to)
+			end
+			return math.random(to)
 		end
 		for _ = 1, 1e3 do
 			local a, b = frac(srand(1e3), srand(1e3)), frac(srand(1e3), srand(1e3))
