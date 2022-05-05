@@ -3,8 +3,8 @@ describe("GCD", function()
 	it("should handle edge cases properly", function()
 		-- Zero
 		assert.equal(1, gcd(0, 0))
-		assert.equal(1, gcd(1e6, 0))
-		assert.equal(1, gcd(0, -1e6))
+		assert.equal(1e6, gcd(1e6, 0))
+		assert.equal(1e6, gcd(0, -1e6))
 		-- Same number
 		for _ = 1, 10 do
 			local a = math.random(-1e3, 1e3)
