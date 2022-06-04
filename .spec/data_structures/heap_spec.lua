@@ -1,6 +1,6 @@
 describe("Heap", function()
 	-- Create shuffled list
-	local shuffle = require("random.fisher_yates_shuffle")
+	local shuffle = require("random.shuffle")
 	local list = {}
 	for index = 1, 100 do
 		list[index] = index

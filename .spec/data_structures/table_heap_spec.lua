@@ -1,6 +1,6 @@
 describe("Table heap", function()
 	local table_heap = require("data_structures.table_heap")
-	local shuffle = require("random.fisher_yates_shuffle")
+	local shuffle = require("random.shuffle")
 
 	local list = {}
 	for index = 1, 100 do

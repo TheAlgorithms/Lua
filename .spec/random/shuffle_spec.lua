@@ -1,5 +1,5 @@
 describe("Fisher-Yates shuffle", function()
-	local shuffle = require("random.fisher_yates_shuffle")
+	local shuffle = require("random.shuffle")
 	local sums = {}
 	local list = {}
 	for i = 1, 10 do

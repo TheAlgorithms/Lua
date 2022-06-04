@@ -1,3 +1,4 @@
+-- Fisher-Yates shuffle
 return function(
 	list -- list to be shuffled in-place
 )
