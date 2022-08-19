@@ -37,7 +37,22 @@ end
 
 -- Arithmetic binary operators
 
-metatable.__pow = intpow
+function complex:sqrt()
+	if self.imaginary == 0 then
+		return complex.new(math.abs(self.real) ^ 0.5, 0)
+	end
+	local real = ((self.real + (self.real ^ 2 + self.imaginary ^ 2) ^ 0.5) / 2) ^ 0.5
+	local imaginary = self.imaginary / 2 / real
+	return complex.new(real, imaginary)
+end
+
+function metatable:__pow(exponent)
+	if exponent == 0.5 then
+		return self:sqrt()
+	end
+	assert(exponent % 1 == 0, "unsupported operation")
+	return intpow(self, exponent)
+end
 
 bin_op("add", function(self, other)
 	return complex.new(self.real + other.real, self.imaginary + other.imaginary)

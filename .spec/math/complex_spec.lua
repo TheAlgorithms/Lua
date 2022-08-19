@@ -37,6 +37,17 @@ describe("Complex number", function()
 			assert.same(complex.new(1), complex.i ^ 44)
 			assert.same(complex.new(2 ^ 8), complex.new(2) ^ 8)
 		end)
+		it("sqrt works", function()
+			local function assert_equals_ignore_sign(a, b)
+				assert(a == b or -a == b)
+			end
+			for _ = 1, 1e3 do
+				local z = complex.new(math.random(-100, 100), math.random(-100, 100))
+				local perfect_square = z^2
+				assert_equals_ignore_sign(perfect_square, (perfect_square^.5)^2)
+				assert_equals_ignore_sign(perfect_square, (perfect_square:sqrt())^2)
+			end
+		end)
 		it("conjugation works", function()
 			assert.same(complex.new(33, 42), complex.new(33, -42):conjugate())
 			for _ = 1, 1e3 do
