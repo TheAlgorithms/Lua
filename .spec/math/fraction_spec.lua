@@ -1,9 +1,50 @@
 describe("Fraction", function()
 	local fraction = require("math.fraction")
 	local frac = fraction.new
-	it("can be constructed", function()
-		assert.same({ numerator = 0, denominator = 1 }, frac(0, 100))
-		assert.same({ numerator = 33, denominator = 41 }, frac(33, 41))
+
+	local frac_strs = {
+		[0 .. "/" .. 1] = frac(0, 1),
+		[-12 .. "/" .. 11] = frac(-12, 11),
+		[12 .. "/" .. 11] = frac(-12, -11),
+	}
+
+	local frac_floats = {
+		{ base = 2, str = "0.1", val = frac(1, 2) },
+		{ base = 2, str = "0.(10)", val = frac(2, 3) },
+		{ base = nil, str = "3.(3)", val = frac(10, 3) }, -- test default base
+		{ base = 10, str = "1.2(3)", val = frac(12, 10) + frac(1, 30) },
+		{ base = 16, str = "1.(45d17)", val = frac(42, 33) },
+	}
+
+	describe("construction", function()
+		it("can be created from numerator & denominator", function()
+			assert.same({ numerator = 0, denominator = 1 }, frac(0, 100))
+			assert.same({ numerator = 33, denominator = 41 }, frac(33, 41))
+		end)
+		it("can be parsed from string", function()
+			for str, val in pairs(frac_strs) do
+				assert.equal(val, fraction.from_string(str))
+			end
+		end)
+		it("can be parsed from floating point string", function()
+			for _, float in pairs(frac_floats) do
+				assert.equal(float.val, fraction.from_float_string(float.str, float.base))
+			end
+			assert.equal(frac(1, 1), fraction.from_float_string("0.(9)"))
+			assert.equal(frac(1, 1), fraction.from_float_string("0.(1)", 2))
+		end)
+	end)
+	describe("string conversion", function()
+		it("tostring formats as numerator/denominator", function()
+			for str, val in pairs(frac_strs) do
+				assert.equal(str, tostring(val))
+			end
+		end)
+		it("to floating point", function()
+			for _, float in pairs(frac_floats) do
+				assert.equal(float.str, float.val:to_float_string(float.base))
+			end
+		end)
 	end)
 	it("is shortened", function()
 		assert.same({ numerator = 3, denominator = 41 * 7 }, frac(33, 41 * 77))
@@ -71,9 +112,5 @@ describe("Fraction", function()
 			assert.equal(a_num <= b_num, a <= b)
 			assert.equal(a_num >= b_num, a >= b)
 		end
-	end)
-	it("string conversion works", function()
-		assert.same(tostring(frac(-12, 11)), -12 .. "/" .. 11)
-		assert.same(tostring(frac(-12, -11)), 12 .. "/" .. 11)
 	end)
 end)
