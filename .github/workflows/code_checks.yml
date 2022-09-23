@@ -10,9 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: JohnnyMorganz/stylua-action@1.0.0
+    - uses: JohnnyMorganz/stylua-action@v1
       with:
-        # TODO the action needs this to download from GitHub releases. Don't upgrade the action for now!
+        version: 0.15.1
         token: ${{ secrets.GITHUB_TOKEN }}
         args: --check .
 
