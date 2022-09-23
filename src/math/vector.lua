@@ -1,6 +1,7 @@
 local vector = {}
 
 local metatable = { __index = vector }
+vector.metatable = metatable
 
 function vector.new(
 	self -- list of numbers without holes; #self is the dimension
@@ -132,6 +133,13 @@ function vector:parallel(other)
 		end
 	end
 	return true -- vectors are parallel / colinear
+end
+
+function vector:reflect(
+	normal -- vector: the surface normal to reflect `self` at; **must be normalized**
+)
+	local parallel_component = self * normal
+	return self - 2 * parallel_component * normal -- reflected vector
 end
 
 function metatable:__tostring()
