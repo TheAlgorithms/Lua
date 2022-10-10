@@ -7,6 +7,7 @@ read_globals = {
 			falsy = {},
 			equal = {},
 			same = {},
+			has_error = {}
 		}
 	}
 }
