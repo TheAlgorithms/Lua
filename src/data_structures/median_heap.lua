@@ -11,10 +11,10 @@ function median_heap.new(less_than)
 	local self
 	self = {
 		less_than = less_than,
-		lower_half = heap.new(function(a, b)
+		lower_half = heap.new(nil, function(a, b)
 			return self.less_than(b, a) -- max heap
 		end),
-		upper_half = heap.new(function(a, b)
+		upper_half = heap.new(nil, function(a, b)
 			return self.less_than(a, b) -- min heap
 		end),
 	}
