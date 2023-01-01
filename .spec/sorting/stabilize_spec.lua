@@ -1,7 +1,7 @@
 describe("Sorting stabilization", function()
 	local stabilize = require("sorting.stabilize")
-	local quicksort = require("sorting.quicksort")
-	local stabilized_quicksort = stabilize(quicksort()) -- random quicksort
+	local heapsort = require("sorting.heapsort")
+	local stabilized_heapsort = stabilize(heapsort)
 	local is_sorted = require("sorting.is_sorted")
 
 	-- Sort by the first element (= value) of the pair
@@ -18,24 +18,21 @@ describe("Sorting stabilization", function()
 	end
 
 	it("should fail if not stabilized and work if stabilized", function()
-		-- Inefficient but deterministic quicksort which can be used to ensure instable sorting
-		local bad_quicksort = quicksort(function(i, _)
-			return i
-		end)
-		local list = { { 1, 1 }, { 2, 2 }, { 1, 3 } }
-		bad_quicksort(list, comparator)
+		local list = { { 2, 1 }, { 2, 2 }, { 1, 3 }, { 1, 4 } }
+		local copy = { unpack(list) }
+		heapsort(list, comparator)
 		assert.falsy(is_sorted(list, verifying_comparator))
-		list = { { 1, 1 }, { 2, 2 }, { 1, 3 } }
-		stabilize(bad_quicksort)(list, comparator)
+		list = copy
+		stabilized_heapsort(list, comparator)
 		assert.truthy(is_sorted(list, verifying_comparator))
 	end)
 
 	it("should handle edge cases", function()
 		local list = {}
-		stabilized_quicksort(list)
+		stabilized_heapsort(list)
 		assert.same({}, list)
 		list = { 1 }
-		stabilized_quicksort(list)
+		stabilized_heapsort(list)
 		assert.same({ 1 }, list)
 	end)
 
@@ -45,7 +42,7 @@ describe("Sorting stabilization", function()
 			for index = 1, 100 do
 				list[index] = { math.random(20), index }
 			end
-			stabilized_quicksort(list, comparator)
+			stabilized_heapsort(list, comparator)
 			assert.truthy(is_sorted(list, verifying_comparator))
 		end
 	end)
