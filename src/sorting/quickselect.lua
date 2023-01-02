@@ -2,9 +2,14 @@ local three_way_partition = require("sorting.three_way_partition")
 
 -- Builder for a Quickselect function given a pivot choosing strategy
 return function(
-	choose_pivot -- `function(from, to) return pivot_idx` where from <= pivot_idx <= to; defaults to `math.random`
+	-- `function(arr, less_than, quickselect) return function(from, to) return pivot_idx`
+	-- where from <= pivot_idx <= to and `quickselect` is a `function(from, to, sort_idx)`;
+	-- defaults to `function() return math.random end`
+	choose_pivot_builder
 )
-	choose_pivot = choose_pivot or math.random
+	choose_pivot_builder = choose_pivot_builder or function()
+		return math.random
+	end
 	-- Actual Quickselect function
 	return function(
 		-- unsorted table to select from; is permuted
@@ -18,6 +23,7 @@ return function(
 			return a < b
 		end
 		assert(sort_idx >= 1 and sort_idx <= #arr and sort_idx == math.floor(sort_idx), "invalid index")
+		local choose_pivot
 		local function quickselect(from, to, sort_idx) -- luacheck: ignore
 			if from == to then -- single element
 				assert(sort_idx == 1)
@@ -42,6 +48,7 @@ return function(
 			local leq_count = larger_from - from
 			return quickselect(larger_from, to, sort_idx - leq_count)
 		end
+		choose_pivot = choose_pivot_builder(arr, less_than, quickselect)
 		return quickselect(1, #arr, sort_idx) -- index of the value in the array after the array has been permuted
 	end
 end
