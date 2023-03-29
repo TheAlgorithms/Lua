@@ -1,18 +1,7 @@
+local modpow = require("math.modpow")
+
 -- Miller-Rabin primality test; nondeterministic variant
 -- Be careful when using this with doubles as precision issues may lead to incorrect results
-
--- Simple integer exponentiation by squaring mod some number
--- Apply mod after (almost) every operation to not run into issues with double precision
-local function modpow(base, exp, mod)
-	if exp == 1 then
-		return base
-	end
-	if exp % 2 == 1 then
-		return (modpow(base, exp - 1, mod) * base) % mod
-	end
-	return modpow(base, exp / 2, mod) ^ 2 % mod
-end
-
 return function(
 	n, -- number to test for primality; may not exceed (2^52)^.5 = 2^26 = 67108864 due to double limitations
 	rounds -- rounds determine accuracy: probability that a composite is considered probably prime does not exceed 4^-k
