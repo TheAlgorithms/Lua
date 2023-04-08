@@ -5,11 +5,19 @@ function heap.less_than(a, b)
 	return a < b
 end
 
-local function swap(self, i, j)
+function heap:_swap(i, j)
 	self[i], self[j] = self[j], self[i]
 end
 
-local function heapify_down(self, index)
+function heap:_insert(val)
+	table.insert(self, val)
+end
+
+function heap:_remove()
+	return table.remove(self)
+end
+
+function heap:_heapify_down(index)
 	local left_child = index * 2
 	if left_child > #self then
 		return
@@ -19,19 +27,19 @@ local function heapify_down(self, index)
 		smallest_child = left_child
 	end
 	if self.less_than(self[smallest_child], self[index]) then
-		swap(self, index, smallest_child)
-		return heapify_down(self, smallest_child)
+		self:_swap(index, smallest_child)
+		return self:_heapify_down(smallest_child)
 	end
 end
 
-local function heapify_up(self, index)
+function heap:_heapify_up(index)
 	if index == 1 then
 		return
 	end
 	local parent = math.floor(index / 2)
 	if self.less_than(self[index], self[parent]) then
-		swap(self, index, parent)
-		return heapify_up(self, parent)
+		self:_swap(index, parent)
+		return self:_heapify_up(parent)
 	end
 end
 
@@ -42,7 +50,7 @@ function heap.new(
 	self = setmetatable(self or {}, metatable)
 	self.less_than = less_than
 	for i = math.floor(#self / 2), 1, -1 do -- iterate over all parents, from lower to higher levels...
-		heapify_down(self, i) -- ... and heapify each.
+		self:_heapify_down(i) -- ... and heapify each.
 	end
 	return self
 end
@@ -56,8 +64,8 @@ function heap:size()
 end
 
 function heap:push(value)
-	table.insert(self, value)
-	heapify_up(self, #self)
+	self:_insert(value)
+	self:_heapify_up(#self)
 end
 
 function heap:top()
@@ -65,14 +73,11 @@ function heap:top()
 end
 
 function heap:pop()
-	local value = self[1]
-	self[1] = self[#self]
-	local len = #self
-	self[#self] = nil
-	if self[1] then
-		heapify_down(self, 1)
+	self:_swap(1, #self)
+	local value = self:_remove()
+	if not self:empty() then
+		self:_heapify_down(1)
 	end
-	assert(not self[len])
 	return value
 end
 

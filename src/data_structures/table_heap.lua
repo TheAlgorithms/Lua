@@ -1,68 +1,33 @@
--- Min heap plus Lua hash table to allow updating the stored values
+local heap = require("data_structures.heap")
+
+-- Min. heap plus Lua (hash) table to allow updating the stored values
 local table_heap = {}
 
-function table_heap.less_than(a, b)
-	return a < b
-end
-
 --> empty, duplicate-free min heap with priority queue functionality
-function table_heap.new(less_than)
-	return { less_than = less_than, indices = {} }
+function table_heap.new(self, less_than)
+	self = heap.new(self, less_than)
+	local indices = {}
+	for i, val in ipairs(self) do
+		indices[val] = i
+	end
+	self.indices = indices
+	return self
 end
 
-local function swap(self, child_index, parent_index)
+function table_heap:_swap(child_index, parent_index)
 	local child_value, parent_value = self[child_index], self[parent_index]
 	self.indices[parent_value], self.indices[child_value] = child_index, parent_index
 	self[parent_index], self[child_index] = child_value, parent_value
 end
 
-local function heapify_up(self, index)
-	if index == 1 then
-		return
-	end
-	local parent_index = math.floor(index / 2)
-	if self.less_than(self[index], self[parent_index]) then
-		swap(self, index, parent_index)
-		heapify_up(self, parent_index)
-	end
+function table_heap:_insert(val)
+	table.insert(self, val)
+	self.indices[val] = #self
 end
 
-local function heapify_down(self, index)
-	local left_child = index * 2
-	if left_child > #self then
-		return
-	end
-	local smallest_child = left_child + 1
-	if smallest_child > #self or self.less_than(self[left_child], self[smallest_child]) then
-		smallest_child = left_child
-	end
-	if self.less_than(self[smallest_child], self[index]) then
-		swap(self, smallest_child, index)
-		heapify_down(self, smallest_child)
-	end
-end
-
-function table_heap:push(value)
-	table.insert(self, value)
-	local last = #self
-	self.indices[value] = last
-	heapify_up(self, last)
-end
-
-function table_heap:top()
-	return self[1]
-end
-
-function table_heap:pop()
-	local value = self[1]
+function table_heap:_remove()
+	local value = table.remove(self)
 	self.indices[value] = nil
-	local last = #self
-	if last == 1 then
-		self[1] = nil
-		return value
-	end
-	self[1], self[last] = self[last], nil
-	heapify_down(self, 1)
 	return value
 end
 
@@ -72,22 +37,30 @@ end
 
 -- Notify heap that the element has been decreased
 function table_heap:decrease(element)
-	heapify_up(self, assert(self:find_index(element)))
+	self:_heapify_up(assert(self:find_index(element)))
 end
 
 -- Notify heap that the element has been increased
 function table_heap:increase(element)
-	heapify_down(self, assert(self:find_index(element)))
+	self:_heapify_down(assert(self:find_index(element)))
 end
 
 -- Replaces the specified element - by identity - with the new element
 function table_heap:replace(element, new_element)
 	local index = assert(self:find_index(element))
-	assert(self:find_index(new_element) == nil, "no duplicates allowed")
+	local new_index = self:find_index(new_element)
+	if new_index ~= nil then
+		assert(new_index == index, "new element is already a member")
+		return
+	end
 	self[index] = new_element
 	self.indices[element] = nil
-	self.indices[new_element] = index;
-	(self.less_than(new_element, element) and heapify_up or heapify_down)(self, index)
+	self.indices[new_element] = index
+	if self.less_than(new_element, element) then
+		self:_heapify_up(index)
+	else
+		self:_heapify_down(index)
+	end
 end
 
 function table_heap:remove(element)
@@ -95,14 +68,18 @@ function table_heap:remove(element)
 	self.indices[element] = nil
 	if index == #self then
 		self[index] = nil
+		return
+	end
+	local last_index = #self
+	local last_element = self[last_index]
+	self[last_index] = nil
+	self[index] = last_element
+	self.indices[last_element] = index
+	if self.less_than(last_element, element) then
+		self:_heapify_up(index)
 	else
-		local last_index = #self
-		local last_element = self[last_index]
-		self[last_index] = nil
-		self[index] = last_element
-		self.indices[last_element] = index;
-		(self.less_than(last_element, element) and heapify_up or heapify_down)(self, index)
+		self:_heapify_down(index)
 	end
 end
 
-return require("class")(table_heap)
+return require("class")(table_heap, heap)
