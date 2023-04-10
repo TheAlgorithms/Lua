@@ -350,22 +350,20 @@ function graph:apsp_floyd_warshall()
 		dist[from][from] = 0
 	end
 	for over in self:nodes() do
-		local next_dist = {}
 		for from in self:nodes() do
-			next_dist[from] = {}
 			for to in self:nodes() do
-				next_dist[from][to] = dist[from][to]
-				-- Try relaxing
-				if dist[from][over] and dist[over][to] then
-					local dist_over = dist[from][over] + dist[over][to]
-					if (not dist[from][to]) or dist_over < dist[from][to] then
-						next_dist[from][to] = dist_over
-						predec[from][to] = over
+				local d_fo, d_ot = dist[from][over], dist[over][to]
+				if d_fo and d_ot then
+					local d = dist[from][to]
+					local d_over = d_fo + d_ot
+					if d == nil or d_over < d then
+						-- Path is `from` -...-> `over` -...-> `to` => predecessor of `to`
+						-- on the path from `from` to `to` is the predecessor of `to` on the path from `over` to `to`
+						dist[from][to], predec[from][to] = d_over, predec[over][to]
 					end
 				end
 			end
 		end
-		dist = next_dist
 	end
 	for node in self:nodes() do
 		assert(dist[node][node] == 0, "negative weight cycle")
