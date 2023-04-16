@@ -21,9 +21,9 @@ describe("Graph", function()
 			g:add_edge(v - 1, v)
 		end
 		g:add_edge(cyc_len, 1)
-		-- Now add random edges (may add more cycles)
+		-- Now set random edges (may add more cycles)
 		for _ = 1, math.random(n ^ 2) do
-			g:add_edge(math.random(n), math.random(n))
+			g:set_weight(math.random(n), math.random(n), true)
 		end
 		return g, n
 	end

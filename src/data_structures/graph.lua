@@ -5,8 +5,10 @@ local table_heap = require("data_structures.table_heap")
 
 local graph = {}
 
-function graph.new(nodes)
-	return { _nodes = nodes or {} } -- nodes[from][to] = weight
+function graph.new(
+	nodes -- table, `nodes[from][to] = weight`; defaults to `{}`
+)
+	return { _nodes = nodes or {} }
 end
 
 function graph:add_node(node)
@@ -23,7 +25,7 @@ function graph:has_node(node)
 end
 
 -- Set the weight of an edge. Overrides a previous weight.
--- `from` and `to` must have already been added.
+-- `from` and `to` must already exist in the graph.
 function graph:set_weight(
 	from, -- node
 	to, -- node
@@ -49,11 +51,12 @@ function graph:has_edge(
 	return self:get_weight(from, to) ~= nil
 end
 
--- Adds an edge with "weight" `true`. May overwrite the weight of an existing edge.
+-- Adds an edge with "weight" `true`.
 function graph:add_edge(
 	from, --[[node]]
 	to --[[node]]
 )
+	assert(self:get_weight(from, to) == nil, "edge already exists")
 	return self:set_weight(from, to, true)
 end
 
@@ -108,7 +111,7 @@ end
 
 -- Breadth-first traversal. Can be used to solve shortest path problems if all edges have the same weight.
 function graph:nodes_breadth_first(
-	root --[[optional root node to start the traversal from]]
+	root -- optional root node to start the traversal from
 )
 	local visited = {}
 	local function breadth_first_traversal(start)
@@ -147,7 +150,7 @@ end
 
 -- Depth-first traversal
 function graph:nodes_depth_first(
-	root --[[optional root node to start the traversal from]]
+	root -- optional root node to start the traversal from
 )
 	local visited = {}
 	local depth = 0
