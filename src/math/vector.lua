@@ -101,6 +101,10 @@ function vector:length()
 	return len ^ 0.5
 end
 
+function vector:distance(other)
+	return (self - other):length()
+end
+
 function vector:normalize()
 	local len = self:length()
 	if len == 0 then
