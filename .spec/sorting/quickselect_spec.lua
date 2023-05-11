@@ -57,6 +57,14 @@ describe("Quickselect", function()
 				it("permutations", function()
 					test_permutation({ 5, 4, 1, 2, 3 })
 				end)
+				it("slices", function()
+					local function test_slice(expected, t, sorted_idx, from, to)
+						assert.equal(expected, t[quickselect(t, sorted_idx, less_than, from, to)])
+					end
+					test_slice(2, { 4, 3, 2, 1 }, 2, 2, nil)
+					test_slice(2, { 4, 3, 2, 1 }, 2, 2, 4)
+					test_slice(3, { 4, 3, 2, 1 }, 2, nil, 3)
+				end)
 			end)
 			describe("random", function()
 				it("sorted arrays", function()
@@ -99,7 +107,12 @@ describe("Quickselect", function()
 	describe("supports different pivot picking strategies", function()
 		local function test_strategy(name, choose_pivot)
 			describe("select " .. name, function()
-				test_quickselect(build_quickselect(function() return choose_pivot end), 20)
+				test_quickselect(
+					build_quickselect(function()
+						return choose_pivot
+					end),
+					20
+				)
 			end)
 		end
 		test_strategy("first", function(from, _)

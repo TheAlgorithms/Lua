@@ -17,11 +17,16 @@ return function(
 		-- index of the value to select if the table were sorted
 		sort_idx,
 		-- optional, defaults to `function(a, b) return a < b end`
-		less_than
+		less_than,
+		-- optional start index of a slice (default `1`)
+		from,
+		-- optional end index of a slice (default `#arr`)
+		to
 	)
 		less_than = less_than or function(a, b)
 			return a < b
 		end
+		from, to = from or 1, to or #arr
 		assert(sort_idx >= 1 and sort_idx <= #arr and sort_idx == math.floor(sort_idx), "invalid index")
 		local choose_pivot
 		local function quickselect(from, to, sort_idx) -- luacheck: ignore
@@ -49,6 +54,6 @@ return function(
 			return quickselect(larger_from, to, sort_idx - leq_count)
 		end
 		choose_pivot = choose_pivot_builder(arr, less_than, quickselect)
-		return quickselect(1, #arr, sort_idx) -- index of the value in the array after the array has been permuted
+		return quickselect(from, to, sort_idx) -- index of the value in the array after the array has been permuted
 	end
 end
