@@ -1,6 +1,9 @@
 read_globals = {
 	"describe",
 	"it",
+	"before_each",
+	"setup",
+	"teardown",
 	assert = {
 		fields = {
 			truthy = {},
