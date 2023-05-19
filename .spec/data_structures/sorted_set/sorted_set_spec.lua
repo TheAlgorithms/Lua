@@ -454,7 +454,7 @@ do
 		-- Note: Assumes non-boolean-keys
 		local function check_node(node, depth, min, max)
 			local keys, children = node.keys, node.children
-			if node ~= tree then -- not the root?
+			if node ~= tree._root then
 				assert(min_keys <= #keys and #keys <= max_keys, "key count out of range")
 			elseif #keys == 0 then
 				assert(not children, "empty root is not childfree")
@@ -480,7 +480,7 @@ do
 				assert.equal(leaf_depth, depth)
 			end
 		end
-		return check_node(tree, 0)
+		return check_node(tree._root, 0)
 	end
 
 	describe("B-Tree", function()

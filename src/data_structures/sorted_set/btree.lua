@@ -45,8 +45,6 @@ end
 
 function btree.new(keys, less_than)
 	-- TODO (?) reduce auxiliary space; support an iterator of keys instead of a list
-	-- TODO (?...) would making `self` be `{_root = root node}` instead be cleaner?
-	-- Currently `self.keys` and `self.children` "expose" B-Tree implementation details.
 	keys = keys or {}
 	-- Construct the tree bottom-up, level by level
 	local max_keys = 2 * btree.order - 1
@@ -82,18 +80,20 @@ function btree.new(keys, less_than)
 		keys, children = next_keys, next_children
 	end
 	return setmetatable({
-		keys = keys,
-		children = children,
+		_root = {
+			keys = keys,
+			children = children,
+		},
 		less_than = less_than,
 	}, metatable)
 end
 
 function btree:empty()
-	return self.keys[1] == nil
+	return self._root.keys[1] == nil
 end
 
 function btree:clear()
-	self.keys, self.children = {}, nil
+	self._root = { keys = {} }
 end
 
 function btree:copy()
@@ -110,16 +110,17 @@ function btree:copy()
 		end
 		return res
 	end
-	local root = copy(self)
-	-- Use `rawget` to not copy the metatable-provided defaults here
-	root.less_than = rawget(self, "less_than")
 	-- Preserve metatable
-	return setmetatable(root, getmetatable(self))
+	return setmetatable({
+		_root = copy(self._root),
+		-- Use `rawget` to not copy the metatable-provided defaults here
+		less_than = rawget(self, "less_than"),
+	}, getmetatable(self))
 end
 
 function btree:find(key)
 	local less_than = self.less_than
-	local node = self
+	local node = self._root
 	repeat
 		local i = binary_search(node.keys, key, less_than)
 		if i > 0 then
@@ -137,7 +138,10 @@ local function min(node)
 	end
 	return node.keys[1] -- min key, or `nil` if empty
 end
-btree.min = min
+
+function btree:min()
+	return min(self._root)
+end
 
 local function max(node)
 	while node.children do
@@ -145,7 +149,10 @@ local function max(node)
 	end
 	return node.keys[#node.keys] -- max key, or `nil` if empty
 end
-btree.max = max
+
+function btree:max()
+	return max(self._root)
+end
 
 function btree:succ(key)
 	if key == nil then
@@ -168,7 +175,7 @@ function btree:succ(key)
 		end
 		return keys[i] -- note: may be nil
 	end
-	return succ(self) -- successor or `nil` if `key == self:max() or self:empty()`
+	return succ(self._root) -- successor or `nil` if `key == self:max() or self:empty()`
 end
 
 function btree:pred(key)
@@ -192,11 +199,9 @@ function btree:pred(key)
 		end
 		return keys[i - 1] -- note: may be nil
 	end
-	return pred(self) -- predecessor or `nil` if `key == self:min() or self:empty()`
+	return pred(self._root) -- predecessor or `nil` if `key == self:min() or self:empty()`
 end
 
--- Less elegant (but also less overhead) alternative: Remember the path using a table
--- (rather than implicitly in the call stack of the coro)
 function btree:range_ascending(min_key, max_key)
 	if min_key == nil and max_key == nil then
 		return self:ascending()
@@ -210,7 +215,7 @@ function btree:range_ascending(min_key, max_key)
 	-- First find the maximum node & corresponding index
 	local max_node, max_i
 	if max_key ~= nil then
-		max_node = self
+		max_node = self._root
 		while true do
 			max_i = binary_search(max_node.keys, max_key, less_than)
 			if max_i > 0 then -- key found?
@@ -259,7 +264,7 @@ function btree:range_ascending(min_key, max_key)
 		end
 	end
 	return coroutine.wrap(function()
-		iter(self, min_key ~= nil)
+		iter(self._root, min_key ~= nil)
 	end)
 end
 
@@ -277,7 +282,7 @@ function btree:range_descending(min_key, max_key)
 	-- First find the minimum node & corresponding index
 	local min_node, min_i
 	if min_key ~= nil then
-		min_node = self
+		min_node = self._root
 		while true do
 			min_i = binary_search(min_node.keys, min_key, less_than)
 			if min_i > 0 then -- key found?
@@ -322,7 +327,7 @@ function btree:range_descending(min_key, max_key)
 		end
 	end
 	return coroutine.wrap(function()
-		iter(self, max_key ~= nil)
+		iter(self._root, max_key ~= nil)
 	end)
 end
 
@@ -339,7 +344,7 @@ function btree:ascending()
 		end
 	end
 	return coroutine.wrap(function()
-		inorder_ascending(self)
+		inorder_ascending(self._root)
 	end)
 end
 
@@ -356,7 +361,7 @@ function btree:descending()
 		end
 	end
 	return coroutine.wrap(function()
-		inorder_descending(self)
+		inorder_descending(self._root)
 	end)
 end
 
@@ -407,10 +412,12 @@ function btree:insert(key, upsert)
 			return split(node)
 		end
 	end
-	local low_child, pivot, high_child = insert(self)
+	local low_child, pivot, high_child = insert(self._root)
 	if pivot then -- split happened?
-		self.keys = { pivot }
-		self.children = { low_child, high_child }
+		self._root = {
+			keys = { pivot },
+			children = { low_child, high_child },
+		}
 	end
 	return previous_key -- nil if there was no previous key
 end
@@ -497,11 +504,11 @@ function btree:remove(key)
 		end
 	end
 	-- Start the actual deletion
-	if delete_from(self) and #self.keys == 0 then
+	if delete_from(self._root) and #self._root.keys == 0 then
 		-- Replace with only child (if we didn't become empty)
-		if self.children then
-			local only_child = self.children[1]
-			self.keys, self.children = only_child.keys, only_child.children
+		if self._root.children then
+			local only_child = self._root.children[1]
+			self._root = only_child
 		end
 	end
 	return found
