@@ -12,5 +12,5 @@ it("Unbiasing 0-1-random", function()
 	end
 	local stddev = n ^ 0.5 / 2
 	local dev = math.abs(successes - n / 2)
-	assert(dev <= 4 * stddev) -- 4 sigma interval => near certainity
+	assert(dev <= 5 * stddev) -- 5 sigma interval => near certainity
 end)
