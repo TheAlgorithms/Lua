@@ -5,7 +5,7 @@ return function(
 )
 	local totient = 0
 	for i = 1, n do
-    	if gcd(i, n) == 1 then -- relatively prime?
+		if gcd(i, n) == 1 then -- relatively prime?
 			totient = totient + 1
 		end
 	end
