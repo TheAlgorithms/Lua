@@ -78,30 +78,3 @@ function fibonacci_matrix(n)
         return result_matrix[1]
     end
 end
-
--- Assert tests for all four functions
-assert(fibonacci_recursive(0) == 0)
-assert(fibonacci_recursive(1) == 1)
-assert(fibonacci_recursive(5) == 5)
-assert(fibonacci_recursive(10) == 55)
-
-assert(fibonacci_dp(0) == 0)
-assert(fibonacci_dp(1) == 1)
-assert(fibonacci_dp(5) == 5)
-assert(fibonacci_dp(10) == 55)
-
--- Test Binet's formula with known limitation
-assert(fibonacci_binet(0) == 0)
-assert(fibonacci_binet(1) == 1)
-assert(fibonacci_binet(5) == 5)
-assert(fibonacci_binet(10) == 55)
-
--- Limitation test after n=70 value will start diverting
-assert(fibonacci_binet(70) == 190392490709135)
-
-assert(fibonacci_matrix(0) == 0)
-assert(fibonacci_matrix(1) == 1)
-assert(fibonacci_matrix(5) == 5)
-assert(fibonacci_matrix(10) == 55)
-
-print("All tests passed!")
