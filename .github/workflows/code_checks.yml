@@ -28,8 +28,7 @@ jobs:
         sudo luarocks install luacheck
     - name: lint
       run: |
-        luacheck src
-        luacheck .spec --config .spec/.luacheckrc
+        luacheck .
 
   test:
     runs-on: ubuntu-latest

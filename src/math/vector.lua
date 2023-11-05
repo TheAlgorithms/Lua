@@ -9,6 +9,10 @@ function vector.new(
 	return setmetatable(self, metatable)
 end
 
+function vector.is(any)
+	return getmetatable(any) == metatable
+end
+
 function vector.make(num, dimension)
 	local v = {}
 	for i = 1, dimension do
@@ -44,13 +48,22 @@ function vector:cross(other)
 end
 
 function metatable:__mul(other)
-	if type(self) == "number" then
-		return scalar_multiplication(self, other)
+	if vector.is(self) then
+		if vector.is(other) then
+			return dot_product(self, other)
+		end
+		local mt = getmetatable(other)
+		if not (mt and mt.__mul) then
+			assert(type(other) == "number")
+			return scalar_multiplication(other, self)
+		end
+		-- HACK delegate to other metatable (specifically matrix metatable).
+		return mt.__mul(self, other)
 	end
-	if type(other) == "number" then
-		return scalar_multiplication(other, self)
-	end
-	return dot_product(self, other)
+	-- `self` can't have a metatable providing `__mul`,
+	-- otherwise Lua would already have called that.
+	assert(type(self) == "number")
+	return scalar_multiplication(self, other)
 end
 
 function metatable:__unm()
