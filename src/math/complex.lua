@@ -7,8 +7,8 @@ local complex = {}
 local metatable = { __index = complex }
 
 function complex.new(
-	real, --[[number, real part]]
-	imaginary --[[number, imaginary part, defaults to 0]]
+	real, -- number, real part
+	imaginary -- number, imaginary part, defaults to 0
 )
 	return setmetatable({ real = real, imaginary = imaginary or 0 }, metatable)
 end
@@ -17,8 +17,8 @@ end
 complex.i = complex.new(0, 1)
 
 function complex.from_polar_coordinates(
-	angle, --[[number, angle in radians]]
-	abs --[[number, radius / norm / length]]
+	angle, -- number, angle in radians
+	abs -- number, radius / norm / length
 )
 	return complex.new(abs * math.cos(angle), abs * math.sin(angle))
 end
@@ -99,8 +99,8 @@ end)
 
 function complex:to_polar_coordinates()
 	local angle, abs = math.atan2(self.imaginary, self.real), self:abs()
-	return angle --[[number, angle in radians]],
-		abs --[[number, radius / norm / length]]
+	return angle, -- number, angle in radians
+		abs -- number, radius / norm / length
 end
 
 function metatable:__tostring()
