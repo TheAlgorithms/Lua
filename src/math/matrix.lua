@@ -55,7 +55,7 @@ end
 function matrix.square(
 	self -- list, reused as matrix object
 )
-	local h = (#self) ^ 0.5
+	local h = math.sqrt(#self)
 	return matrix.with_height(h, self)
 end
 
