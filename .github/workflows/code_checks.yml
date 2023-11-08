@@ -23,13 +23,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1"
+
+      - uses: leafo/gh-actions-luarocks@v4
+
       - name: setup
         run: |
-          sudo apt install luarocks -qyy
-          sudo luarocks install luacheck
+          luarocks install luacheck
+
       - name: lint
         run: |
-          luacheck .
+          luacheck .spec src
 
   test:
     runs-on: ubuntu-latest
