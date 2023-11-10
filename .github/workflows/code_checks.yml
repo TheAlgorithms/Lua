@@ -15,7 +15,7 @@ jobs:
         with:
           version: 0.18.2
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --check .
+          args: --check .spec src
 
   lint:
     runs-on: ubuntu-latest

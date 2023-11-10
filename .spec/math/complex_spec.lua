@@ -43,9 +43,9 @@ describe("Complex number", function()
 			end
 			for _ = 1, 1e3 do
 				local z = complex.new(math.random(-100, 100), math.random(-100, 100))
-				local perfect_square = z^2
-				assert_equals_ignore_sign(perfect_square, (perfect_square^.5)^2)
-				assert_equals_ignore_sign(perfect_square, (perfect_square:sqrt())^2)
+				local perfect_square = z ^ 2
+				assert_equals_ignore_sign(perfect_square, (perfect_square ^ 0.5) ^ 2)
+				assert_equals_ignore_sign(perfect_square, (perfect_square:sqrt()) ^ 2)
 			end
 		end)
 		it("conjugation works", function()
