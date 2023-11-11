@@ -1,5 +1,6 @@
 describe("Modular inverse", function()
 	local modular_inverse = require("math.modular_inverse")
+
 	it("should handle general cases", function()
 		assert.equal(5, modular_inverse(3, 7))
 		assert.equal(4, modular_inverse(-1, 5))
@@ -15,13 +16,13 @@ describe("Modular inverse", function()
 		assert.equal(nil, modular_inverse(0, 1))
 	end)
 
-	it("should throw error when molulus is zero", function()
+	it("should throw error when modulus is zero", function()
 		assert.has_error(function()
 			modular_inverse(1, 0)
 		end)
 	end)
 
-	it("should throw error when molulus is negative", function()
+	it("should throw error when modulus is negative", function()
 		assert.has_error(function()
 			modular_inverse(1, -1)
 		end)
