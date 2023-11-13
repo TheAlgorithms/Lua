@@ -1,16 +1,15 @@
--- computs the Hemming "edit" distance, i.e.
--- for the strings of the same length,
--- the number of indices at which the corresponding characters are different.
+-- Computes the Hamming "edit" distance for two strings of the same length:
+-- The number of indices at which the corresponding bytes are different.
 return function(
-	a, --- some string
-	b --- other string
+	a, -- some string
+	b -- other string
 )
-	assert(#a == #b, "inputs must have the same length.")
-	local res = 0
+	assert(#a == #b, "lengths don't match")
+	local dist = 0
 	for i = 1, #a do
-		if string.byte(a, i) ~= string.byte(b, i) then
-			res = res + 1
+		if a:byte(i) ~= b:byte(i) then
+			dist = dist + 1
 		end
 	end
-	return res
+	return dist
 end
