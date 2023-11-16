@@ -13,7 +13,13 @@ describe("Modular inverse", function()
 	it("should handle cases when inputs are not co-prime", function()
 		assert.equal(nil, modular_inverse(2, 2))
 		assert.equal(nil, modular_inverse(5, 15))
+	end)
+
+	it("should handle cases when modulus is 1", function()
+		assert.equal(nil, modular_inverse(-1, 1))
 		assert.equal(nil, modular_inverse(0, 1))
+		assert.equal(nil, modular_inverse(1, 1))
+		assert.equal(nil, modular_inverse(2, 1))
 	end)
 
 	it("should throw error when modulus is zero", function()

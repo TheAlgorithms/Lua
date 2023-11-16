@@ -8,8 +8,11 @@ return function(
 	m -- modulus
 )
 	assert(m > 0, "modulus must be positive")
+	if m == 1 then
+		return nil
+	end
 	local gcd, x, _ = extended_gcd(a % m, m)
-	if a ~= 0 and gcd == 1 then
+	if gcd == 1 then
 		-- Ensure that result is in (0, m)
 		return x % m
 	end
