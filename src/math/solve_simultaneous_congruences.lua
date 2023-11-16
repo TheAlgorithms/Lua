@@ -8,11 +8,20 @@ local function all_moduli_prod(congruences)
 	return res
 end
 
--- Solves system of congruences represented by list of pairs.
+-- Solves system of simultaneous congruences, i.e. the system of the form:
+-- ```
+-- x = a_0 mod m_0
+-- x = a_1 mod m_1
+-- ...
+-- ```
+-- where `a_0`, `a_1`, ... and `m_0`, `m_1`, ... are given.
+--
+-- The system is represented by list of pairs.
 -- The pair `{a, m}` represents a congruance `x = a mod m`.
 -- For the input {{a_0, m_0}, {a_1, m_1}, ...},
 -- it finds a number `x`, such that
--- x = a_i mod m_i and 0 < x < m_1 * m_2 * ...
+-- `x = a_i mod m_i` and `0 < x < m_0 * m_1 * ...`.
+-- The imlementation is based on the Chinese remainder theorem.
 return function(congruences)
 	local all_prod = all_moduli_prod(congruences)
 
