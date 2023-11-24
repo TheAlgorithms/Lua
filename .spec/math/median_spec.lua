@@ -1,0 +1,15 @@
+describe("median", function()
+	local median = require("math.median")
+
+	it("should handle general cases", function()
+		assert.equal(1, median({ 1 }))
+		assert.equal(1.5, median({ 1, 2 }))
+		assert.equal(3, median({ 3, 1, 2, 5, 5 }))
+		assert.equal(2.5, median({ 2, 3, 1, 4 }))
+		assert.equal(0, median({ 11, 0, 0, 0, 0, 0, 0, 0, 10 }))
+	end)
+
+	it("should return nil for empty input", function()
+		assert.equal(nil, median({}))
+	end)
+end)
