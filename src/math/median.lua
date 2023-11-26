@@ -1,15 +1,19 @@
+local quickselect = require("sorting.quickselect_median_of_medians")
+
 -- Computes the median of the input list `nums`.
--- In this iplementantion the input array is sorted
--- and the "middle" value is returned.
 return function(nums)
 	if #nums == 0 then
 		return nil
 	end
-	table.sort(nums)
-	local size = #nums
-	if size % 2 == 0 then
-		return (nums[size / 2] + nums[size / 2 + 1]) / 2
+	if #nums == 1 then
+		return nums[1]
+	end
+	local copy = { unpack(nums) }
+	local mid_pos = quickselect(copy, math.ceil(#copy / 2))
+	if #nums % 2 == 1 then
+		return copy[mid_pos]
 	else
-		return nums[(size + 1) / 2]
+		local next_mid_pos = quickselect(copy, 1, nil, mid_pos + 1)
+		return (copy[mid_pos] + copy[next_mid_pos]) / 2
 	end
 end
