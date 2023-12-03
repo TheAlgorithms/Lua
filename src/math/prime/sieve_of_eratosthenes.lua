@@ -2,7 +2,7 @@
 return function(
 	n -- number
 )
-	assert(n > 0, "The input must be positive")
+	assert(n > 0, "n must be positive")
 	local is_prime = { false }
 	for m = 2, n do -- mark as prime
 		is_prime[m] = true
