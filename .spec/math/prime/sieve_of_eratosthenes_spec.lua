@@ -1,12 +1,33 @@
 describe("Sieve of Eratosthenes", function()
 	local sieve = require("math.prime.sieve_of_eratosthenes")
 	local check_primality = require("math.prime.is_prime")
-	it("works for small numbers", function()
-		for n = 1, 5 do
-			for number, is_prime in ipairs(sieve(n ^ 2 * 1000)) do
-				assert.equal(check_primality(number), is_prime)
-			end
+
+	local function check_sieve(n)
+		local sieve_result = sieve(n)
+		assert.equal(n, #sieve_result)
+		for number, is_prime in ipairs(sieve_result) do
+			assert.equal(check_primality(number), is_prime)
 		end
+	end
+
+	it("works for small numbers", function()
+		check_sieve(1)
+		check_sieve(2)
+		check_sieve(3)
+		check_sieve(4)
+		check_sieve(5)
+		check_sieve(6)
+		check_sieve(7)
+		check_sieve(9)
+		check_sieve(10)
+		check_sieve(24)
+		check_sieve(25)
+		check_sieve(26)
+		check_sieve(1000)
+		check_sieve(4000)
+		check_sieve(9000)
+		check_sieve(16000)
+		check_sieve(25000)
 	end)
 	it("yields the correct count for large numbers", function()
 		local count = 0
@@ -16,5 +37,10 @@ describe("Sieve of Eratosthenes", function()
 			end
 		end
 		assert.equal(78498, count)
+	end)
+	it("should throw error when input is not positive", function()
+		assert.has_error(function()
+			sieve(0)
+		end)
 	end)
 end)
