@@ -2,13 +2,14 @@
 return function(
 	n -- number
 )
+	assert(n > 0, "n must be positive")
 	local is_prime = { false }
 	for m = 2, n do -- mark as prime
 		is_prime[m] = true
 	end
-	for m = 2, n / 2 do -- iterate possible primes
+	for m = 2, math.sqrt(n) do -- iterate possible primes
 		if is_prime[m] then
-			for l = 2 * m, n, m do -- iterate multiples
+			for l = m * m, n, m do -- iterate multiples
 				is_prime[l] = false -- "cross out" composite
 			end
 		end
