@@ -11,15 +11,9 @@ describe("Sieve of Eratosthenes", function()
 	end
 
 	it("works for small numbers", function()
-		check_sieve(1)
-		check_sieve(2)
-		check_sieve(3)
-		check_sieve(4)
-		check_sieve(5)
-		check_sieve(6)
-		check_sieve(7)
-		check_sieve(9)
-		check_sieve(10)
+		for i = 1, 10 do
+			check_sieve(i)
+		end
 		check_sieve(24)
 		check_sieve(25)
 		check_sieve(26)
