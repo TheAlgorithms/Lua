@@ -13,6 +13,10 @@ describe("Fraction", function()
 		{ base = 2, str = "0.(10)", val = frac(2, 3) },
 		{ base = nil, str = "3.(3)", val = frac(10, 3) }, -- test default base
 		{ base = 10, str = "1.2(3)", val = frac(12, 10) + frac(1, 30) },
+		{ base = 10, str = "1", val = frac(1, 1) },
+		{ base = 10, str = "-2", val = frac(-2, 1) },
+		{ base = 10, str = "-1.25", val = frac(-5, 4) },
+		{ base = 10, str = "-1.3(51)", val = frac(-223, 165) },
 		{ base = 16, str = "1.(45d17)", val = frac(42, 33) },
 	}
 
