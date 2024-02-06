@@ -70,10 +70,11 @@ local function read_base_param(base)
 	return base
 end
 
-function fraction.from_float_string(
-	str, -- <digit>{<digit>}.{digit}[(<digit>{digit})], ex.: `-1.2(3)`
+local function parse_positive_double_string(
+	str, -- <digit>{<digit>}.{digit}[(<digit>{digit})], ex.: `1.2(3)`
 	base -- integer from 2 to 36, defaults to 10 (decimal)
 )
+	assert(not string.find(str, "-"))
 	base = read_base_param(base)
 	local function read_number(str_)
 		return assert(tonumber(str_, base))
@@ -94,6 +95,16 @@ function fraction.from_float_string(
 		+ fraction.new(read_number(period), base ^ #period - 1)
 	) -- period
 	return read_number(integer) + after_dot / base ^ #pre_period
+end
+
+function fraction.from_float_string(
+	str, -- <digit>{<digit>}.{digit}[(<digit>{digit})], ex.: `-1.2(3)`
+	base -- integer from 2 to 36, defaults to 10 (decimal)
+)
+	if str:sub(1, 1) == "-" then
+		return -parse_positive_double_string(str:sub(2), base)
+	end
+	return parse_positive_double_string(str, base)
 end
 
 -- Conversions
