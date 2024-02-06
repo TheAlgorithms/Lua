@@ -71,10 +71,9 @@ local function read_base_param(base)
 end
 
 local function parse_positive_double_string(
-	str, -- <digit>{<digit>}.{digit}[(<digit>{digit})], ex.: `1.2(3)`
+	str, -- EBNF: digit { digit } "." { digit } [ "(" digit { digit } ")" ], ex.: `1.2(3)`
 	base -- integer from 2 to 36, defaults to 10 (decimal)
 )
-	assert(not string.find(str, "-"))
 	base = read_base_param(base)
 	local function read_number(str_)
 		return assert(tonumber(str_, base))
@@ -82,6 +81,7 @@ local function parse_positive_double_string(
 
 	local integer, fractional = str:match("^([0-9a-zA-Z][0-9a-zA-Z]-)%.([0-9a-zA-Z%(%)]+)")
 	if not fractional then
+		assert(str:match("[0-9a-zA-Z]+"))
 		return new(read_number(str), 1)
 	end
 
@@ -98,7 +98,7 @@ local function parse_positive_double_string(
 end
 
 function fraction.from_float_string(
-	str, -- <digit>{<digit>}.{digit}[(<digit>{digit})], ex.: `-1.2(3)`
+	str, -- EBNF: [ "-" ] digit { digit } "." { digit } [ "(" digit { digit } ")" ], ex.: `-1.2(3)`
 	base -- integer from 2 to 36, defaults to 10 (decimal)
 )
 	if str:sub(1, 1) == "-" then
