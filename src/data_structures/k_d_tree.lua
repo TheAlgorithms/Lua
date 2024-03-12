@@ -1,4 +1,4 @@
--- k-d trees are d-dimensional binary search trees.
+-- k-d trees are k-dimensional binary search trees.
 -- They are particularly suitable for answering nearest neighbor queries after preprocessing a set of points.
 
 local k_d_tree = {}
