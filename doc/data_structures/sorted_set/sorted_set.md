@@ -4,7 +4,7 @@
 
 All operations operate on *values* rather than *references*.
 
-Contrary to popular textbooks, operations don't return references to interally used data structures (such as tree nodes).
+Contrary to popular textbooks, operations don't return references to internally used data structures (such as tree nodes).
 
 This makes some sequences of operations slower.
 For example if you first `find` a key and then upsert the same key using `insert`;
