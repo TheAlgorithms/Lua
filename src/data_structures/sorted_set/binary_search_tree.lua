@@ -99,7 +99,7 @@ function bst:succ(key)
 	return node and node.key
 end
 
--- Analogeous to `succ`
+-- Analogous to `succ`
 local function pred_node(self, key)
 	local less_than = self.less_than
 	local function pred(node)

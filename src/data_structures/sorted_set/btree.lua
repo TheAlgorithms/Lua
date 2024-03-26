@@ -268,7 +268,7 @@ function btree:range_ascending(min_key, max_key)
 	end)
 end
 
--- Analogeous to `range_ascending`
+-- Analogous to `range_ascending`
 function btree:range_descending(min_key, max_key)
 	if min_key == nil and max_key == nil then
 		return self:descending()
