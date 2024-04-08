@@ -109,6 +109,18 @@ function graph:edges()
 	end)
 end
 
+--> graph with reversed edge direction
+function graph:transposed()
+	local transposed = graph.new()
+	for node in self:nodes() do
+		transposed:add_node(node)
+	end
+	for from, to, weight in self:edges() do
+		transposed:set_weight(to, from, weight)
+	end
+	return transposed
+end
+
 -- Breadth-first traversal. Can be used to solve shortest path problems if all edges have the same weight.
 function graph:nodes_breadth_first(
 	root -- optional root node to start the traversal from
@@ -246,6 +258,51 @@ function graph:nodes_topological_order()
 		i = i - 1
 		return nodes[i] -- will be `nil` for `i < 1`
 	end
+end
+
+-- Kosaraju's algorithm
+--> list of strongly connected components (sets of nodes), topologically sorted
+function graph:strongly_connected_components()
+	local nodes_depth_first = {}
+	do -- "postorder", depth-first traversal
+		local seen = {}
+		local function visit(node)
+			if seen[node] then
+				return
+			end
+			seen[node] = true
+			for neighbor in self:neighbors(node) do
+				visit(neighbor)
+			end
+			table.insert(nodes_depth_first, node)
+		end
+		for node in self:nodes() do
+			visit(node)
+		end
+	end
+	local transposed = self:transposed()
+	local seen = {}
+	local connected_components = {}
+	for i = #nodes_depth_first, 1, -1 do
+		local root = nodes_depth_first[i]
+		if not seen[root] then
+			seen[root] = true
+			local component = {}
+			local to_visit = { root }
+			repeat
+				local node = table.remove(to_visit)
+				component[node] = true
+				for neighbor in transposed:neighbors(node) do
+					if not seen[neighbor] then
+						seen[neighbor] = true
+						table.insert(to_visit, neighbor)
+					end
+				end
+			until to_visit[1] == nil
+			table.insert(connected_components, component)
+		end
+	end
+	return connected_components
 end
 
 -- Single source shortest paths using Dijkstra.

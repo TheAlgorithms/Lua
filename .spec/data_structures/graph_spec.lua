@@ -126,6 +126,17 @@ describe("Graph", function()
 		local g = graph.new({ a = { b = 42 }, b = {} })
 		assert.same(g, g:copy())
 	end)
+	it("transposed", function()
+		local g = graph.new({ a = { b = 42 }, b = {}, c = { a = 1, b = 2 } })
+		assert.same(
+			graph.new({
+				a = { c = 1 },
+				b = { a = 42, c = 2 },
+				c = {},
+			}),
+			g:transposed()
+		)
+	end)
 	local function traversal_common(fname)
 		local function visits_all_nodes(g)
 			local expected_nodes = {}
@@ -212,6 +223,37 @@ describe("Graph", function()
 				end
 				for from, to in g:edges() do
 					assert(ranks[from] < ranks[to])
+				end
+			end
+		end)
+	end)
+	describe("strongly connected components", function()
+		it("works on a simple example", function()
+			local g = graph.new({
+				[1] = { [2] = true },
+				[2] = { [1] = true, [3] = true },
+				[3] = { [4] = true },
+				[4] = { [3] = true },
+			})
+			assert.same({
+				{ [1] = true, [2] = true },
+				{ [3] = true, [4] = true },
+			}, g:strongly_connected_components())
+		end)
+		it("sorts result topologically", function()
+			for _ = 1, 10 do
+				local g = random_directed_acyclic_graph()
+				local rank = {}
+				local i = 0
+				for _, component in ipairs(g:strongly_connected_components()) do
+					local node = assert(next(component))
+					assert.same({ [node] = true }, component)
+					assert.equal(nil, next(component, node))
+					i = i + 1
+					rank[node] = i
+				end
+				for from, to in g:edges() do
+					assert(rank[from] < rank[to])
 				end
 			end
 		end)
