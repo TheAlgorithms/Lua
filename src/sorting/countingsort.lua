@@ -1,58 +1,52 @@
-function counting_sort(arr, key_function)
-     -- If no key_function is provided, use identity function
-     key_function = key_function or function(x) return x end
+return function(
+    -- list to be sorted in-place
+    list,
+    -- key_function to map elements to integer keys, defaults to identity
+    key_function
+)
+    -- Default to identity function if no key_function is provided
+    key_function = key_function or function(x) return x end
 
-     -- Step 1: Find the range of keys (min_key and max_key)
-     local min_key, max_key = math.huge, -math.huge
-     for i = 1, #arr do
-         local key = key_function(arr[i])
-         if key < min_key then
-             min_key = key
-         end
-         if key > max_key then
-             max_key = key
-         end
-     end
+    -- Handle empty list case
+    if #list == 0 then return end
 
-     -- Step 2: Initialize the count array
-     local count = {}
-     for i = min_key, max_key do
-         count[i] = 0
-     end
+    -- Find the range of keys (min_key and max_key)
+    local min_key, max_key = math.huge, -math.huge
+    for _, elem in ipairs(list) do
+        local key = key_function(elem)
+        min_key = math.min(min_key, key)
+        max_key = math.max(max_key, key)
+    end
 
-      -- Step 3: Count the occurrences of each key. In this case key is same as arr[i]
-     for i = 1, #arr do
-         local key = key_function(arr[i])
-         count[key] = count[key] + 1
-     end
+    -- Initialize the count array 
+    local count = {}
+    for i = 1, (max_key - min_key + 1) do
+        count[i] = 0
+    end
 
-     -- Step 4: Compute cumulative counts to get final positions
-     for i = min_key + 1, max_key do
-         count[i] = count[i] + count[i - 1]
-     end
+    -- Count then occurrences of each key
+    for _, elem in ipairs(list) do
+        local key = key_function(elem)
+        count[key - min_key + 1] = count[key - min_key + 1] + 1
+    end
 
-     -- Step 5: Build the output array (in stable order)
-     local output = {}
-     for i = #arr, 1, -1 do
-         local element = arr[i]
-         local key = key_function(element)
-         output[count[key]] = element
-         count[key] = count[key] - 1
-     end
+    -- Compute cumulative counts for final positions
+    for i = 2, ipairs(count) do
+        count[i] = count[i] + count[i - 1]
+    end
 
-     -- Step 6: Copy the output array back to the original array
-     for i = 1, #arr do
-         arr[i] = output[i]
-     end
- end
+    -- Build the output array (in stable order)
+    local output = {}
+    for i = #list, 1, -1 do
+        local element = list[i]
+        local key = key_function(element)
+        output[count[key - min_key + 1]] = element
+        count[key - min_key + 1] = count[key - min_key + 1] - 1
+    end
 
--- Sample array
-local arr = {100, 2, 2, 8, 3, 10000000, 1}
-
--- Simple usage with identity key function
-counting_sort(arr)
-
--- Print sorted array
-for i, v in ipairs(arr) do
-    print(v)
+    -- Copy the output array back to the original list
+    for i, elem in ipairs(output) do
+        list[i] = elem
+    end
 end
+
