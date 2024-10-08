@@ -17,7 +17,7 @@ return function(
     end
 
     local count = {}
-    for i = 1, (max_key - min_key + 1) do
+    for i = 1, max_key - min_key + 1 do
         count[i] = 0
     end
 
