@@ -8,7 +8,7 @@ return function(
     key_function = key_function or function(x) return x end
 
     -- Handle empty list case
-    if #list == 0 then return end
+    if list[1] == nil then return end
 
     -- Find the range of keys (min_key and max_key)
     local min_key, max_key = math.huge, -math.huge
