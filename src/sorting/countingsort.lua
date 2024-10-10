@@ -21,14 +21,14 @@ return function(
         count[i] = 0
     end
 
-    -- Count then occurrences of each key
+    -- Count the occurrences of each key
     for _, elem in ipairs(list) do
         local key = key_function(elem)
         count[key - min_key + 1] = count[key - min_key + 1] + 1
     end
 
     -- Compute cumulative counts for final positions
-    for i = 2, ipairs(count) do
+    for i = 2, #count do
         count[i] = count[i] + count[i - 1]
     end
 
